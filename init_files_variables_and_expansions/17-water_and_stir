@@ -1,2 +1,2 @@
 #!/bin/bash
-echo "obase=$BESTCHOL; ibase=$WATER; $WATERVAL + ibase=$STIR; $STIRVAL" | bc
+printf "%X\n" "$(( $((WATERNUM#${WATERVAL})) + $((STIRNUM#${STIRVAL})) ))"
