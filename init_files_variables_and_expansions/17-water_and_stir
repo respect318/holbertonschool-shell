@@ -1,2 +1,2 @@
 #!/bin/bash
-printf "%X\n" "$(( $((WATERNUM#${WATERVAL})) + $((STIRNUM#${STIRVAL})) ))"
+printf "%X\n" $((WATER#$WATERVAL + STIR#$STIRVAL))
