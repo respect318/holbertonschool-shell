@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Fallback solution
 while IFS=: read a b c d e f g; do
 printf "The user %s is part of the %s gang, lives in %s and rides %s.\n" $a $d $f $g
