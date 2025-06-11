@@ -2,13 +2,18 @@
 # This script displays the time for 12 hours and 59 minutes, from 0 to 12 hours and 1 to 59 minutes.
 
 hour=0
+count=0
 while [ $hour -le 12 ]
 do
   minute=1
   while [ $minute -le 59 ]
   do
     echo "$hour:$minute"
+    ((count++))
+    if [ $count -ge 70 ]; then
+      exit 0
+    fi
     ((minute++))
   done
   ((hour++))
-done | head -n 70
+done
