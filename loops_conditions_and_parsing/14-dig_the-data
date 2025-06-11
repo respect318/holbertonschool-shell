@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 # This script reads the /etc/passwd file and displays user details in a specific format.
 # Uses awk instead of while-read loop to comply with requirements.
 
