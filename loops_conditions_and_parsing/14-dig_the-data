@@ -1,19 +1,19 @@
 #!/usr/bin/env bash
-# Apache log analyzer - groups by IP and HTTP status without forbidden commands
+# Beginner-friendly Apache log analyzer
 
 awk '
-BEGIN {
-    print "OCCURENCE_NUMBER IP HTTP_CODE"
-}
 {
-    # Count each IP+status combination
-    counts[$1,$9]++
+    # Count each IP and status code combination
+    count[$1,$9]++
 }
 END {
-    # Process and sort the results
-    PROCINFO["sorted_in"] = "@val_num_desc"
-    for (key in counts) {
-        split(key, parts, SUBSEP)
-        print counts[key], parts[1], parts[2]
+    # Print header
+    print "OCCURENCE_NUMBER IP HTTP_CODE"
+    
+    # Print all counts with IP and status
+    for (combo in count) {
+        split(combo, parts, SUBSEP)
+        print count[combo], parts[1], parts[2]
     }
-}' "$1"
+}
+' "$1" | sort -nr -k1
