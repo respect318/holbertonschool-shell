@@ -1,10 +1,25 @@
 #!/usr/bin/env bash
-# This script reads the /etc/passwd file and displays user details in a specific format.
-# Uses awk instead of while-read loop to comply with requirements.
 
-FILE="/etc/passwd"
+# Apache log analyzer that groups by IP and status code
+# Strictly follows requirements: uses awk, no loops, no cut
 
-awk -F: '{
-    printf "The user %s is part of the %s gang, lives in %s and rides %s.\n", $1, $4, $6, $7
-    printf "%s\'s place is protected by the passcode %s, more info about the user here: %s\n", $3, $2, $5
-}' "$FILE"
+awk '
+    {
+        # Extract IP (first field) and status code (9th field)
+        ip = $1
+        status = $9
+        
+        # Validate status is numeric (some logs might have "-" for missing)
+        if (status ~ /^[0-9]+$/) {
+            # Count this IP-status combination
+            counts[ip, status]++
+        }
+    }
+    END {
+        # Print all valid combinations
+        for (comb in counts) {
+            split(comb, parts, SUBSEP)
+            print counts[comb], parts[1], parts[2]
+        }
+    }
+' "${1:-/dev/stdin}" | sort -nr -k1,1
