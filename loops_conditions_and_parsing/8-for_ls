@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 # This script lists the content of the current directory and displays only the part of the name after the first dash.
+# It excludes hidden files and directories.
 
-for file in */
+for file in *-*  # Matches files and directories containing a dash
 do
-  # Remove the first part before the first dash and display the rest
-  echo "${file#*-}"
+  # Ensure it's not a hidden file
+  if [[ ! "$file" =~ ^\..* ]]; then
+    echo "${file#*-}"  # Remove everything before the first dash and display the rest
+  fi
 done
