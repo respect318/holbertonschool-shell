@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
-# Alternative bulletproof version
+# This script processes the /etc/passwd file and displays specific details in the required format.
 
-while IFS=: read -r username password uid gid info home shell || [ -n "$username" ]; do
-    printf "The user %s is part of the %s gang, lives in %s and rides %s.\n" \
-           "$username" "$gid" "$home" "$shell"
-    printf "%s's place is protected by the passcode %s, more info about the user here: %s\n\n" \
-           "$username" "$password" "$info"
+while IFS=: read -r username password uid gid gecos home shell; do
+    echo "The user $username is part of the $gid gang, lives in $home and rides $shell."
+    echo "User ID's place is protected by the passcode $password, more info about the user here: $gecos"
 done < /etc/passwd
