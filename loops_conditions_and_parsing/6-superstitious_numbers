@@ -1,18 +1,21 @@
 #!/usr/bin/env bash
-# This script displays numbers from 1 to 20 and shows specific messages for certain numbers using the case statement.
+# Bu skript 1-dən 20-yə qədər rəqəmləri göstərir və müəyyən dövrlər üçün xüsusi mesajlar göstərir.
 
 count=1
 while [ $count -le 20 ]
 do
   case $count in
     4)
-      echo "4 - bad luck from China"
+      echo "4"
+      echo "bad luck from China"
       ;;
     9)
-      echo "9 - bad luck from Japan"
+      echo "9"
+      echo "bad luck from Japan"
       ;;
     17)
-      echo "17 - bad luck from Italy"
+      echo "17"
+      echo "bad luck from Italy"
       ;;
     *)
       echo $count
