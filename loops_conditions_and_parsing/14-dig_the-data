@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# This script groups visitors by IP and HTTP status code, counts occurrences,
+# and displays the data ordered from greatest to lowest.
+
+# Using awk to extract IP and HTTP code, then sorting and counting occurrences
+awk '{print $1, $9}' apache_log_file | sort | uniq -c | sort -nr | awk '{print $1, $2, $3}'
