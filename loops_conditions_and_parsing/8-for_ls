@@ -1,12 +1,22 @@
 #!/usr/bin/env bash
 # This script lists the content of the current directory and displays only the part of the name after the first dash.
-# It excludes hidden files.
+# It excludes hidden files and handles empty directories, files with dashes, and special cases.
 
-for file in *-*  # Match files and directories that contain a dash
+# First, we need to check if there are any files in the directory
+found_files=false
+
+# Iterate over files in the directory that contain a dash
+for file in *-*  
 do
-  # Exclude hidden files and directories
+  # Skip hidden files and directories
   if [[ ! "$file" =~ ^\..* ]]; then
-    # Display only the part of the name after the first dash
+    # If we find a file with a dash, we print the part after the first dash
     echo "${file#*-}"
+    found_files=true
   fi
 done
+
+# If no files were found with the above condition, check for empty folders
+if ! $found_files; then
+  echo "empty folder"
+fi
