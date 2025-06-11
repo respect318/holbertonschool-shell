@@ -10,7 +10,7 @@ do
   do
     echo "$hour:$minute"
     ((count++))
-    if [ $count -ge 70 ]; then
+    if [ $count -eq 70 ]; then
       exit 0
     fi
     ((minute++))
