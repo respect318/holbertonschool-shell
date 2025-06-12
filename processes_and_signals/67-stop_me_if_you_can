@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Script to send SIGTERM to the 7-highlander process
+
+ps -eo pid,args | grep '[.]\/7-highlander' | awk '{print $1}' | xargs -r kill -s SIGTERM
