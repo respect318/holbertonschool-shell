@@ -2,26 +2,36 @@
 # This script manages the 'manage_my_process' process (start, stop, restart)
 # shellcheck disable=SC2009
 
+PID_FILE="/var/run/my_process.pid"
+PROCESS_CMD="./manage_my_process"
+
+start_process() {
+    $PROCESS_CMD &
+    echo $! > "$PID_FILE"
+    echo "manage_my_process started"
+}
+
+stop_process() {
+    if [ -f "$PID_FILE" ]; then
+        pid=$(cat "$PID_FILE")
+        if ps -p "$pid" > /dev/null 2>&1; then
+            kill "$pid"
+        fi
+        rm -f "$PID_FILE"
+    fi
+    echo "manage_my_process stopped"
+}
+
 case "$1" in
     start)
-        ./manage_my_process &
-        echo $! > /var/run/my_process.pid
-        echo "manage_my_process started"
+        start_process
         ;;
     stop)
-        if [ -f /var/run/my_process.pid ]; then
-            kill "$(cat /var/run/my_process.pid)" 2>/dev/null
-            rm -f /var/run/my_process.pid
-        fi
-        echo "manage_my_process stopped"
+        stop_process
         ;;
     restart)
-        if [ -f /var/run/my_process.pid ]; then
-            kill "$(cat /var/run/my_process.pid)" 2>/dev/null
-            rm -f /var/run/my_process.pid
-        fi
-        ./manage_my_process &
-        echo $! > /var/run/my_process.pid
+        stop_process
+        start_process
         echo "manage_my_process restarted"
         ;;
     *)
