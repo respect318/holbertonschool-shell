@@ -6,7 +6,7 @@ PROCESS_SCRIPT="./manage_my_process"
 
 case "$1" in
     start)
-        "$PROCESS_SCRIPT" &
+        nohup "$PROCESS_SCRIPT" > /dev/null 2>&1 &
         echo $! > "$PID_FILE"
         echo "manage_my_process started"
         ;;
@@ -26,7 +26,7 @@ case "$1" in
             kill "$PID" 2>/dev/null
             rm -f "$PID_FILE"
         fi
-        "$PROCESS_SCRIPT" &
+        nohup "$PROCESS_SCRIPT" > /dev/null 2>&1 &
         echo $! > "$PID_FILE"
         echo "manage_my_process restarted"
         ;;
