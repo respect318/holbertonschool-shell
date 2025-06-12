@@ -1,32 +1,38 @@
 #!/usr/bin/env bash
-# Init script to manage the manage_my_process daemon
+# Manages the manage_my_process daemon with start/stop/restart functionality
 
 PID_FILE="/var/run/my_process.pid"
+DAEMON="/tmp/manage_my_process"
 
 case "$1" in
     start)
-        # Start the process and create PID file
-        /tmp/manage_my_process &
+        if [ -f "$PID_FILE" ]; then
+            echo "Error: Process already running (PID $(cat "$PID_FILE"))" >&2
+            exit 1
+        fi
+        $DAEMON &
         echo $! > "$PID_FILE"
         echo "manage_my_process started"
         ;;
     stop)
-        # Stop the process and remove PID file
-        if [ -f "$PID_FILE" ]; then
-            kill "$(cat "$PID_FILE")"
-            rm "$PID_FILE"
+        if [ ! -f "$PID_FILE" ]; then
+            echo "Error: PID file not found" >&2
+            exit 1
         fi
+        PID=$(cat "$PID_FILE")
+        if ps -p "$PID" > /dev/null; then
+            kill "$PID"
+        fi
+        rm -f "$PID_FILE"
         echo "manage_my_process stopped"
         ;;
     restart)
-        # Restart by calling stop then start
         $0 stop
         sleep 1
         $0 start
         echo "manage_my_process restarted"
         ;;
     *)
-        # Show usage if no or invalid argument
         echo "Usage: $0 {start|stop|restart}"
         exit 1
         ;;
