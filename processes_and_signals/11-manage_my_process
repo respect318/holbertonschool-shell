@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# This script manages the 'manage_my_process' process (start, stop, restart)
+# shellcheck disable=SC2009
+
+case "$1" in
+    start)
+        ./manage_my_process &
+        echo $! > /var/run/my_process.pid
+        echo "manage_my_process started"
+        ;;
+    stop)
+        if [ -f /var/run/my_process.pid ]; then
+            kill "$(cat /var/run/my_process.pid)" 2>/dev/null
+            rm -f /var/run/my_process.pid
+        fi
+        echo "manage_my_process stopped"
+        ;;
+    restart)
+        if [ -f /var/run/my_process.pid ]; then
+            kill "$(cat /var/run/my_process.pid)" 2>/dev/null
+            rm -f /var/run/my_process.pid
+        fi
+        ./manage_my_process &
+        echo $! > /var/run/my_process.pid
+        echo "manage_my_process restarted"
+        ;;
+    *)
+        echo "Usage: manage_my_process {start|stop|restart}"
+        ;;
+esac
