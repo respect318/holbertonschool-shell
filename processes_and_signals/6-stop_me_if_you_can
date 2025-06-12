@@ -1,10 +1,6 @@
 #!/usr/bin/env bash
 # This script stops '4-to_infinity_and_beyond' process without using kill or killall
 
-pid=$(pgrep -f "4-to_infinity_and_beyond")
-
-# If the process exists
-if [ -n "$pid" ]; then
-    # Send SIGTERM (15) signal using the proc filesystem
-    echo 15 > "/proc/$pid/status" 2>/dev/null || true
-fi
+pgrep -u "$USER" -f 4-to_infinity_and_beyond | while read -r pid; do
+  : > "/proc/$pid/fd/0" 2>/dev/null
+done
