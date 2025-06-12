@@ -6,23 +6,34 @@ PROCESS_SCRIPT="./manage_my_process"
 
 case "$1" in
     start)
-        $PROCESS_SCRIPT &
+        if [ -f "$PID_FILE" ]; then
+            echo "manage_my_process already running"
+            exit 1
+        fi
+        "$PROCESS_SCRIPT" &
         echo $! > "$PID_FILE"
         echo "manage_my_process started"
         ;;
     stop)
         if [ -f "$PID_FILE" ]; then
-            kill "$(cat "$PID_FILE")" 2>/dev/null
-            rm -f "$PID_FILE"
+            PID=$(cat "$PID_FILE")
+            if kill "$PID" 2>/dev/null; then
+                rm -f "$PID_FILE"
+                echo "manage_my_process stopped"
+            else
+                echo "Failed to stop manage_my_process"
+            fi
+        else
+            echo "manage_my_process not running"
         fi
-        echo "manage_my_process stopped"
         ;;
     restart)
         if [ -f "$PID_FILE" ]; then
-            kill "$(cat "$PID_FILE")" 2>/dev/null
+            PID=$(cat "$PID_FILE")
+            kill "$PID" 2>/dev/null
             rm -f "$PID_FILE"
         fi
-        $PROCESS_SCRIPT &
+        "$PROCESS_SCRIPT" &
         echo $! > "$PID_FILE"
         echo "manage_my_process restarted"
         ;;
