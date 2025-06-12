@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 # Script to kill the 7-highlander process
 
+# Find the process ID of 7-highlander
+pid=$(pgrep -f "7-highlander")
 
-ps -eo pid,args | grep '[.]\/7-highlander' | awk '{print $1}' | xargs -r kill
+# If process exists, kill it with SIGKILL (9)
+if [ -n "$pid" ]; then
+    kill -9 "$pid"
+fi
+
+exit 0
