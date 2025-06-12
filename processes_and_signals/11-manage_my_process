@@ -1,44 +1,35 @@
 #!/usr/bin/env bash
-# This script manages the 'manage_my_process' process (start, stop, restart)
-# shellcheck disable=SC2009
+# Init script to manage the manage_my_process daemon
 
 PID_FILE="/var/run/my_process.pid"
-PROCESS_CMD="./manage_my_process"
-
-start_process() {
-    $PROCESS_CMD &              # Proses fonda başlayır
-    echo $! > "$PID_FILE"       # PID faylı yazılır
-    echo "manage_my_process started"
-}
-
-stop_process() {
-    if [ -f "$PID_FILE" ]; then
-        pid=$(cat "$PID_FILE")
-        if ps -p "$pid" > /dev/null 2>&1; then
-            kill "$pid" > /dev/null 2>&1
-        fi
-        rm -f "$PID_FILE"
-    fi
-    echo "manage_my_process stopped"
-}
-
-restart_process() {
-    stop_process
-    start_process
-    echo "manage_my_process restarted"
-}
 
 case "$1" in
     start)
-        start_process
+        # Start the process and create PID file
+        /tmp/manage_my_process &
+        echo $! > "$PID_FILE"
+        echo "manage_my_process started"
         ;;
     stop)
-        stop_process
+        # Stop the process and remove PID file
+        if [ -f "$PID_FILE" ]; then
+            kill "$(cat "$PID_FILE")"
+            rm "$PID_FILE"
+        fi
+        echo "manage_my_process stopped"
         ;;
     restart)
-        restart_process
+        # Restart by calling stop then start
+        $0 stop
+        sleep 1
+        $0 start
+        echo "manage_my_process restarted"
         ;;
     *)
-        echo "Usage: manage_my_process {start|stop|restart}"
+        # Show usage if no or invalid argument
+        echo "Usage: $0 {start|stop|restart}"
+        exit 1
         ;;
 esac
+
+exit 0
