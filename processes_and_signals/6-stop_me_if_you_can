@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 # This script stops '4-to_infinity_and_beyond' process without using kill or killall
 
-pid=$(pgrep -f 4-to_infinity_and_beyond)
-[ -n "$pid" ] && echo > "/proc/$pid/fd/0"
+pid=$(pgrep -f "./4-to_infinity_and_beyond")
+[ -n "$pid" ] && printf '\003' > "/proc/$pid/fd/0" 2>/dev/null
