@@ -6,8 +6,8 @@ PID_FILE="/var/run/my_process.pid"
 PROCESS_CMD="./manage_my_process"
 
 start_process() {
-    $PROCESS_CMD &
-    echo $! > "$PID_FILE"
+    $PROCESS_CMD &              # Proses fonda başlayır
+    echo $! > "$PID_FILE"       # PID faylı yazılır
     echo "manage_my_process started"
 }
 
@@ -15,11 +15,17 @@ stop_process() {
     if [ -f "$PID_FILE" ]; then
         pid=$(cat "$PID_FILE")
         if ps -p "$pid" > /dev/null 2>&1; then
-            kill "$pid"
+            kill "$pid" > /dev/null 2>&1
         fi
         rm -f "$PID_FILE"
     fi
     echo "manage_my_process stopped"
+}
+
+restart_process() {
+    stop_process
+    start_process
+    echo "manage_my_process restarted"
 }
 
 case "$1" in
@@ -30,9 +36,7 @@ case "$1" in
         stop_process
         ;;
     restart)
-        stop_process
-        start_process
-        echo "manage_my_process restarted"
+        restart_process
         ;;
     *)
         echo "Usage: manage_my_process {start|stop|restart}"
