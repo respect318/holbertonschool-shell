@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Display all running processes for all users in a hierarchical tree format
+
+ps -eo user,pid,ppid,%cpu,%mem,cmd --forest
