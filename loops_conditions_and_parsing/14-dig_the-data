@@ -1,4 +1,4 @@
-#!usr/bin/env bash
+#!/usr/bin/env bash
 # Apache log analyzer that groups by IP and status code
 # Strictly follows requirements: uses awk, no loops, no cut
 
