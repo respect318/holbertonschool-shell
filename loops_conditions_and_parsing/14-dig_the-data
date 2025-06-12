@@ -1,24 +1,5 @@
-#!/usr/bin/env bash
+#!usr/bin/env bash
 # Apache log analyzer that groups by IP and status code
 # Strictly follows requirements: uses awk, no loops, no cut
 
-awk '
-    {
-        # Extract IP (first field) and status code (9th field)
-        ip = $1
-        status = $9
-        
-        # Validate status is numeric (some logs might have "-" for missing)
-        if (status ~ /^[0-9]+$/) {
-            # Count this IP-status combination
-            counts[ip, status]++
-        }
-    }
-    END {
-        # Print all valid combinations
-        for (comb in counts) {
-            split(comb, parts, SUBSEP)
-            print counts[comb], parts[1], parts[2]
-        }
-    }
-' "${1:-/dev/stdin}" | sort -nr -k1,1
+awk '{print $1, $9}' apache-access.log | uniq -c | sort -nr
