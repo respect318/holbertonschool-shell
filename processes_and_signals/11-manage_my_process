@@ -1,41 +1,33 @@
 #!/usr/bin/env bash
-# Manages the manage_my_process daemon with start/stop/restart functionality
+# Script to manage the background process: manage_my_process
 
 PID_FILE="/var/run/my_process.pid"
-DAEMON="/tmp/manage_my_process"
+PROCESS_SCRIPT="./manage_my_process"
 
 case "$1" in
     start)
-        if [ -f "$PID_FILE" ]; then
-            echo "Error: Process already running (PID $(cat "$PID_FILE"))" >&2
-            exit 1
-        fi
-        $DAEMON &
+        $PROCESS_SCRIPT &
         echo $! > "$PID_FILE"
         echo "manage_my_process started"
         ;;
     stop)
-        if [ ! -f "$PID_FILE" ]; then
-            echo "Error: PID file not found" >&2
-            exit 1
+        if [ -f "$PID_FILE" ]; then
+            kill "$(cat "$PID_FILE")" 2>/dev/null
+            rm -f "$PID_FILE"
         fi
-        PID=$(cat "$PID_FILE")
-        if ps -p "$PID" > /dev/null; then
-            kill "$PID"
-        fi
-        rm -f "$PID_FILE"
         echo "manage_my_process stopped"
         ;;
     restart)
-        $0 stop
-        sleep 1
-        $0 start
+        if [ -f "$PID_FILE" ]; then
+            kill "$(cat "$PID_FILE")" 2>/dev/null
+            rm -f "$PID_FILE"
+        fi
+        $PROCESS_SCRIPT &
+        echo $! > "$PID_FILE"
         echo "manage_my_process restarted"
         ;;
     *)
-        echo "Usage: $0 {start|stop|restart}"
+        echo "Usage: manage_my_process {start|stop|restart}"
         exit 1
         ;;
 esac
-
-exit 0
