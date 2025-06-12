@@ -2,9 +2,9 @@
 # Script that handles PID file, signals, and displays messages accordingly
 
 PID_FILE="/var/run/myscript.pid"
-echo $$ > "$PID_FILE"
+echo $$ | sudo tee "$PID_FILE" > /dev/null
 
-# SIGTERM: kill (default)
+# SIGTERM: kill
 handle_sigterm() {
     echo "I hate the kill command"
     rm -f "$PID_FILE"
@@ -22,7 +22,7 @@ handle_sigquit() {
     exit 0
 }
 
-# Signal trapping
+# Signal traps
 trap handle_sigterm SIGTERM
 trap handle_sigint SIGINT
 trap handle_sigquit SIGQUIT
