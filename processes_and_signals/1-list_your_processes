@@ -1,7 +1,4 @@
 #!/usr/bin/env bash
-# Script to display all running processes in hierarchical format with user details
+# This script displays a list of all currently running processes in a user-oriented hierarchical format
 
-set -eo pipefail
-ps -ef --forest -ww
-
-exit 0
+ps -eo user,pid,ppid,%cpu,%mem,tty,stat,start,time,cmd --forest
