@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# This script shows lines containing the word 'bash' from the running process list
+ps auxf | grep [b]ash
