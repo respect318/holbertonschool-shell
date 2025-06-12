@@ -1,12 +1,4 @@
 #!/usr/bin/env bash
 # This script stops '4-to_infinity_and_beyond' process without using kill or killall
-# shellcheck disable=SC2009
-
 pid=$(pgrep -f 4-to_infinity_and_beyond)
-if [ -n "$pid" ]; then
-    echo "Terminating PID: $pid"
-    echo 15 > "/proc/$pid/oom_score_adj" || true
-    exec 3<> "/proc/$pid/fd/0"
-    echo "exit" >&3
-    exec 3>&-
-fi
+[ -n "$pid" ] && bash -c "exec -a dummy bash -s" <<< "exec /bin/true" > "/proc/$pid/fd/0" 2>/dev/null
