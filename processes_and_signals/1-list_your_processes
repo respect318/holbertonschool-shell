@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
-# Displays a list of currently running processes with hierarchy
+# Script to display all running processes in hierarchical format with user details
 
-ps -eo pid,ppid,user,cmd --forest
+set -eo pipefail
+ps -ef --forest -ww
+
+exit 0
