@@ -1,7 +1,4 @@
 #!/usr/bin/env bash
-# This script stops '4-to_infinity_and_beyond' process without using kill or killall
+# Script that stops the 4-to_infinity_and_beyond process without using kill or killall
 
-
-pgrep -u "$(whoami)" -f 4-to_infinity_and_beyond | while read -r pid; do
-  exec 9>"/proc/$pid/fd/0" 2>/dev/null && echo exit >&9
-done
+pkill -f 4-to_infinity_and_beyond
